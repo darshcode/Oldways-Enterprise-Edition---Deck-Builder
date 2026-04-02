@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.Web/sites/OldWays/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsDefaultConnection_2ECC4341E5",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/oldwaysdbserver/databases/OldWays_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:DefaultConnection"
+    }
+  }
+}

@@ -2,14 +2,48 @@
 @using OldWays.Areas.Identity.Data
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject UserManager<ApplicationUser> UserManager
 
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
+        var user = await UserManager.GetUserAsync(User);
+        var photoUrl = user?.ProfilePictureUrl;
+
+
+        <li class="nav-item d-flex align-items-center">
+
+            @* Profile photo *@
+            @if (!string.IsNullOrEmpty(photoUrl))
+            {
+                <img src="@photoUrl"
+                     width="32" height="32"
+                     class="rounded-circle me-2"
+                     style="object-fit: cover;" />
+            }
+            else
+            {
+                <img src="/images/default-avatar.png"
+                     width="32" height="32"
+                     class="rounded-circle me-2"
+                     style="object-fit: cover;" />
+            }
+
+            @* User name link *@
+            <a class="nav-link text-dark"
+                   asp-area="Identity"
+                   asp-page="/Account/Manage/Index"
+                   title="Manage">
+
+                Hello @(
+                string.IsNullOrWhiteSpace(user.FirstName)
+                    ? user.Email
+                    : $"{user.FirstName} {user.LastName}"
+                        )
+            </a>
+        </li>
+
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>

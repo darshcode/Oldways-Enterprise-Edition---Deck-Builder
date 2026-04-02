@@ -1,7 +1,9 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OldWays.Areas.Identity.Data;
 using OldWays.Data;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+//set the azurite version to avoid issues with the latest version of the Azure Storage SDK
+var azuriteVersionSetting = new BlobClientOptions(BlobClientOptions.ServiceVersion.V2021_12_02);
+builder.Services.AddSingleton(x =>
+    new BlobServiceClient(
+        builder.Configuration.GetConnectionString("StorageConnection"), azuriteVersionSetting));
+
+
 builder.Services.AddControllersWithViews();
+
 
 var app = builder.Build();
 

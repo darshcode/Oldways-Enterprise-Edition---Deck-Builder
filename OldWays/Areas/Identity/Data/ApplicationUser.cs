@@ -13,5 +13,8 @@ namespace OldWays.Areas.Identity.Data
 
         [PersonalData]
         public string? PostalCode { get; set; }
+
+        [PersonalData]
+        public string? ProfilePictureUrl { get; set; }
     }
 }
