@@ -135,12 +135,23 @@ namespace OldWays.Areas.Identity.Pages.Account.Manage
                 var fileName = $"{user.Id}.jpg";
                 var blob = container.GetBlobClient(fileName);
 
+
                 using (var stream = file.OpenReadStream())
                 {
                     await blob.UploadAsync(stream, overwrite: true);
                 }
 
-                user.ProfilePictureUrl = blob.Uri.ToString();
+                // Set cache control headers to prevent caching of the profile picture
+                var headers = new BlobHttpHeaders
+                {
+                    ContentType = "image/jpeg",
+                    CacheControl = "no-cache, no-store, must-revalidate"
+                };
+
+                await blob.SetHttpHeadersAsync(headers);
+
+                user.ProfilePictureUrl = $"{blob.Uri}?v={Guid.NewGuid()}";
+
             }
 
 
