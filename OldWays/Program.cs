@@ -1,10 +1,11 @@
-using Azure.Storage.Blobs;
 using Azure.Identity;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using OldWays.Areas.Identity.Data;
 using OldWays.Data;
-using Microsoft.Extensions.Azure;
 using OldWays.Services;
 
 
@@ -30,6 +31,10 @@ builder.Services.AddDefaultIdentity<ApplicationUser>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// Email sender service
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(
+    builder.Configuration.GetSection("SendGrid"));
 
 
 //Blob Storage
@@ -45,7 +50,6 @@ builder.Services.AddControllersWithViews();
 
 
 var app = builder.Build();
-
 
 
 // Configure the HTTP request pipeline.
