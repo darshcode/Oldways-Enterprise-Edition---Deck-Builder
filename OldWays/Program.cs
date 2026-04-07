@@ -23,7 +23,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>
     (
     options => { 
         options.SignIn.RequireConfirmedAccount = false;
-        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedEmail = true;
         options.Password.RequireUppercase = false;
         options.Password.RequireDigit = false;
         options.Password.RequiredUniqueChars = 0;
@@ -35,6 +35,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(
     builder.Configuration.GetSection("SendGrid"));
+
 
 
 //Blob Storage

@@ -16,7 +16,7 @@ namespace OldWays.Services
             _logger = logger;
         }
 
-        public AuthMessageSenderOptions Options { get; } // Set with Secret Manager.
+        public AuthMessageSenderOptions Options { get; } // Set with dotnet local Secret Manager.
 
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
@@ -34,7 +34,7 @@ namespace OldWays.Services
 
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("darsh.dhillon@outlook.com", "OldWays"),
+                From = new EmailAddress(Options.FromEmail, Options.FromName),
                 Subject = subject,
                 HtmlContent = message
             };
