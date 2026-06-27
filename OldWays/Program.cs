@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using OldWays.Areas.Identity.Data;
 using OldWays.Data;
+using OldWays.Models;
 using OldWays.Services;
 
 
@@ -36,6 +37,8 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(
     builder.Configuration.GetSection("SendGrid"));
 
+//weather settings service
+builder.Services.Configure<WeatherSettings>(builder.Configuration.GetSection("WeatherSettings"));
 
 
 //Blob Storage

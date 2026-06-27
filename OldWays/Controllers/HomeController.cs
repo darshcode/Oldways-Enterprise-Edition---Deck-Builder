@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using OldWays.Models;
 using System.Diagnostics;
 using System.Text.Json;
@@ -11,18 +12,22 @@ namespace OldWays.Controllers
 
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly WeatherSettings _weatherSettings;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IOptions<WeatherSettings> weatherOptions)
         {
             _logger = logger;
             _configuration = configuration;
+            _weatherSettings = weatherOptions.Value;
         }
 
         public async Task<IActionResult> Index()
         {
-            var apiKey = _configuration["WeatherSettings:ApiKey"];
-            var city = _configuration["WeatherSettings:City"];
-            var days = _configuration["WeatherSettings:Days"];
+            var apiKey = _weatherSettings.ApiKey;
+            var city = _weatherSettings.City;
+            var days = _weatherSettings.Days;
+
 
             var url = $"https://api.weatherapi.com/v1/forecast.json?key={apiKey}&q={city}&days={days}&aqi=no&alerts=no";
 
