@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OldWays.Areas.Identity.Data;
+using OldWays.Models;
 
 namespace OldWays.Data
 {
@@ -12,6 +13,7 @@ namespace OldWays.Data
             : base(options)
         {
         }
+        public DbSet<Service> Services { get; set; }
 
     }
 }
