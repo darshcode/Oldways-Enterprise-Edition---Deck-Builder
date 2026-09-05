@@ -14,6 +14,5 @@ namespace OldWays.Data
         {
         }
         public DbSet<Service> Services { get; set; }
-
     }
 }

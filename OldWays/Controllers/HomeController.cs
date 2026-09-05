@@ -52,9 +52,9 @@ namespace OldWays.Controllers
             });
         }
 
-       
 
-        
+
+
         public IActionResult Privacy()
         {
             return View();

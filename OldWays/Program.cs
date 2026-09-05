@@ -3,7 +3,6 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Azure;
 using OldWays.Areas.Identity.Data;
 using OldWays.Data;
 using OldWays.Models;
@@ -42,13 +41,26 @@ builder.Services.Configure<WeatherSettings>(builder.Configuration.GetSection("We
 
 
 //Blob Storage
-builder.Services.AddAzureClients(clientBuilder =>
+if (builder.Environment.IsDevelopment())
 {
-    var storage = builder.Configuration.GetConnectionString("StorageConnection");
+    // Local Azurite
+    builder.Services.AddSingleton(_ =>
+        new BlobServiceClient("UseDevelopmentStorage=true"));
+}
+else
+{
+    // Real Azure Blob Storage
+    builder.Services.AddSingleton(x =>
+    {
+        var config = x.GetRequiredService<IConfiguration>();
+        var storage = config.GetConnectionString("StorageConnection");
 
-    clientBuilder.AddBlobServiceClient(storage).WithCredential(new DefaultAzureCredential());           
-});
-
+        return new BlobServiceClient(
+            new Uri(storage),
+            new DefaultAzureCredential()
+        );
+    });
+}
 
 builder.Services.AddControllersWithViews();
 
