@@ -1,0 +1,20 @@
+﻿@model List<ForecastDay>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var day in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>@DateTime.Parse(day.Date).ToString("dddd, MMM d")</h5>
+                        <img src="@day.Day.Condition.Icon" alt="@day.Day.Condition.Text" />
+                        <p><strong>@day.Day.Condition.Text</strong></p>
+                        <p>High: @day.Day.MaxtempC&deg;C | Low: @day.Day.MintempC&deg;C</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

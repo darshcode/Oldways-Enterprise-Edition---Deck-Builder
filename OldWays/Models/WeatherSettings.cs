@@ -7,3 +7,4 @@
         public int Days { get; set; } = 3;
     }
 }
+//TODO: add to settings panel.

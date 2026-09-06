@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using OldWays.Data;
 using OldWays.Models;
+using OldWays.Services;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -13,48 +15,45 @@ namespace OldWays.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
         private readonly WeatherSettings _weatherSettings;
+        private readonly WeatherService _weatherService;
+        private readonly ApplicationDbContext _db;
 
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IOptions<WeatherSettings> weatherOptions)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IOptions<WeatherSettings> weatherOptions, WeatherService weatherService, ApplicationDbContext db)
         {
             _logger = logger;
             _configuration = configuration;
             _weatherSettings = weatherOptions.Value;
+            _weatherService = weatherService;
+            _db = db;
         }
 
         public async Task<IActionResult> Index()
         {
-            var apiKey = _weatherSettings.ApiKey;
-            var city = _weatherSettings.City;
-            var days = _weatherSettings.Days;
 
+            var forecast = await _weatherService.GetForecastAsync();
 
-            var url = $"https://api.weatherapi.com/v1/forecast.json?key={apiKey}&q={city}&days={days}&aqi=no&alerts=no";
+            /*
+             var slideshows = await _db.Slideshows
+            .Where(s => s.IsActive)
+            .OrderBy(s => s.DisplayOrder)
+            .Include(s => s.Images.Where(i => i.IsActive))
+            .ToListAsync();
+            */
 
-            using var client = new HttpClient();
-            var response = await client.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
+            var vm = new HomeViewModel
             {
-                _logger.LogError("Weather API failed with status: " + response.StatusCode);
-                return View(new WeatherForecastViewModel());
-            }
+                ForecastDays = forecast,
+                //Slideshows = slideshows
+            };
 
-            var json = await response.Content.ReadAsStringAsync();
-            var apiData = JsonSerializer.Deserialize<WeatherApiResponse>(json, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            return View(vm);
 
-            return View(new WeatherForecastViewModel
-            {
-                ForecastDays = apiData?.Forecast?.Forecastday ?? new List<ForecastDay>()
-            });
         }
 
-       
 
-        
+
+
         public IActionResult Privacy()
         {
             return View();

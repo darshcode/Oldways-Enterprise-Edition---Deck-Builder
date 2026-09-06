@@ -1,29 +1,14 @@
-﻿@model OldWays.Models.WeatherForecastViewModel
+﻿@model OldWays.Models.HomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
 
-@if (Model?.ForecastDays != null && Model.ForecastDays.Any())
-{
-    <div class="row">
-        @foreach (var day in Model.ForecastDays)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5>@DateTime.Parse(day.Date).ToString("dddd, MMM d")</h5>
-                        <img src="@day.Day.Condition.Icon" alt="@day.Day.Condition.Text" />
-                        <p><strong>@day.Day.Condition.Text</strong></p>
-                        <p>High: @day.Day.MaxtempC&deg;C | Low: @day.Day.MintempC&deg;C</p>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <p>No forecast data available.</p>
-}
+@* weatherpanel *@
+<partial name="_WeatherPanel" model="Model.ForecastDays" />
+
+
+
+@* Slideshows *@
+@* to be added*@
