@@ -10,11 +10,11 @@ namespace OldWays.Services
         private readonly ILogger<WeatherService> _logger;
         private readonly HttpClient _httpClient;
 
-        public WeatherService(IOptions<WeatherSettings> settings, ILogger<WeatherService> logger)
+        public WeatherService(IOptions<WeatherSettings> settings, ILogger<WeatherService> logger, HttpClient httpClient)
         {
             _settings = settings.Value;
             _logger = logger;
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
         }
 
         public async Task<List<ForecastDay>> GetForecastAsync()

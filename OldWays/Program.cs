@@ -31,10 +31,10 @@ builder.Services.AddDefaultIdentity<ApplicationUser>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
 // Weather service
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddTransient<WeatherService>();
-
 
 
 // Email sender service
