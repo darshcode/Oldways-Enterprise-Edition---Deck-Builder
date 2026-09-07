@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 using OldWays.Data;
 using OldWays.Models;
 using OldWays.Services;
@@ -33,26 +34,23 @@ namespace OldWays.Controllers
 
             var forecast = await _weatherService.GetForecastAsync();
 
-            /*
+            
              var slideshows = await _db.Slideshows
-            .Where(s => s.IsActive)
-            .OrderBy(s => s.DisplayOrder)
-            .Include(s => s.Images.Where(i => i.IsActive))
-            .ToListAsync();
-            */
+                .Include(s => s.Images)
+                .OrderBy(s => s.DisplayOrder)
+                .ToListAsync();
+
+
 
             var vm = new HomeViewModel
             {
                 ForecastDays = forecast,
-                //Slideshows = slideshows
+                Slideshows = slideshows
             };
 
             return View(vm);
 
         }
-
-
-
 
         public IActionResult Privacy()
         {

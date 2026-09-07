@@ -14,6 +14,8 @@ namespace OldWays.Data
         {
         }
         public DbSet<Service> Services { get; set; }
+        public DbSet<Slideshow> Slideshows { get; set; }
+        public DbSet<SlideshowImage> SlideshowImages { get; set; }
 
     }
 }

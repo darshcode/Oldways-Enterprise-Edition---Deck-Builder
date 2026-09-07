@@ -1,0 +1,80 @@
+﻿@model OldWays.Models.Slideshow
+
+@{
+    ViewData["Title"] = "Edit Slideshow";
+}
+
+<div class="container mt-4">
+    <h2>Edit Slideshow</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DisplayOrder" class="form-label"></label>
+            <input asp-for="DisplayOrder" class="form-control" type="number" />
+            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label">Active</label>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+
+    <hr />
+
+    <h3>Images</h3>
+
+    @if (Model.Images != null && Model.Images.Any())
+    {
+        <div class="row">
+            @foreach (var img in Model.Images.OrderBy(i => i.DisplayOrder))
+            {
+                <div class="col-md-3 mb-3">
+                    <div class="card">
+                        <img src="@img.ImageUrl" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="card-title">@img.Title</h5>
+                            <p>Order: @img.DisplayOrder</p>
+
+                            <a asp-controller="SlideshowImage"
+                               asp-action="Edit"
+                               asp-route-id="@img.Id"
+                               class="btn btn-warning btn-sm">Edit Image</a>
+
+                            <a asp-controller="SlideshowImage"
+                               asp-action="Delete"
+                               asp-route-id="@img.Id"
+                               class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No images yet.</p>
+    }
+
+    <a asp-controller="SlideshowImage"
+       asp-action="Create"
+       asp-route-slideshowId="@Model.Id"
+       class="btn btn-primary mt-3">Add Image</a>
+</div>

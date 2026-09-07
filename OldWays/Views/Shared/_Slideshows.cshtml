@@ -1,0 +1,92 @@
+﻿@model List<OldWays.Models.Slideshow>
+
+<div class="container">
+    <h2>Slideshows</h2>
+
+    <!-- Create Slideshow Button -->
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createSlideshowModal">
+        Create New Slideshow
+    </button>
+
+    <!-- Create Slideshow Modal -->
+    <div class="modal fade" id="createSlideshowModal" tabindex="-1" aria-labelledby="createSlideshowLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createSlideshowLabel">Create Slideshow</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form asp-controller="Slideshow" asp-action="Create" method="post">
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input name="Name" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="Description" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Display Order</label>
+                            <input name="DisplayOrder" class="form-control" type="number" value="0" />
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input name="IsActive" class="form-check-input" type="checkbox" checked />
+                            <label class="form-check-label">Active</label>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Create</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Existing slideshow list -->
+    @foreach (var slideshow in Model)
+    {
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between">
+                <h4>@slideshow.Name</h4>
+
+                <div>
+                    <a asp-controller="Slideshow" asp-action="Edit" asp-route-id="@slideshow.Id"
+                       class="btn btn-warning btn-sm">Edit</a>
+
+                    <a asp-controller="Slideshow"
+                       asp-action="Delete"
+                       asp-route-id="@slideshow.Id"
+                       class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="card-body">
+                <p>@slideshow.Description</p>
+
+                <div class="row">
+                    @foreach (var img in slideshow.Images.OrderBy(i => i.DisplayOrder))
+                    {
+                        <div class="col-md-3">
+                            <img src="@img.ImageUrl" class="img-fluid rounded mb-2" />
+                            <p>@img.Title</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
