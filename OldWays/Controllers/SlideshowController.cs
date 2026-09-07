@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OldWays.Data;
@@ -20,6 +21,7 @@ namespace OldWays.Controllers
 
         public IActionResult Create() => View();
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Create(Slideshow slideshow)
         {
@@ -28,6 +30,7 @@ namespace OldWays.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var slideshow = _db.Slideshows
@@ -40,6 +43,7 @@ namespace OldWays.Controllers
             return View(slideshow);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Edit(Slideshow slideshow)
         {
@@ -51,6 +55,7 @@ namespace OldWays.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var slideshow = _db.Slideshows.Include(s => s.Images)
@@ -62,6 +67,7 @@ namespace OldWays.Controllers
             return View(slideshow);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult DeleteConfirmed(int id)
         {

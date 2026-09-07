@@ -1,0 +1,51 @@
+﻿@model OldWays.Models.SlideshowImage
+
+@{
+    ViewData["Title"] = "Edit Image";
+}
+
+<div class="container mt-4">
+    <h2>Edit Image</h2>
+
+    <div class="mb-3">
+        <img src="@Model.ImageUrl" class="img-fluid rounded" style="max-width: 300px;" />
+        <p class="text-muted mt-2">Current Image</p>
+    </div>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="SlideshowId" />
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AltText" class="form-label"></label>
+            <input asp-for="AltText" class="form-control" />
+            <span asp-validation-for="AltText" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DisplayOrder" class="form-label"></label>
+            <input asp-for="DisplayOrder" class="form-control" type="number" />
+            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label"></label>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Replace Image (optional)</label>
+            <input type="file" name="upload" class="form-control" />
+            <small class="text-muted">Uploading a new file will replace the existing blob.</small>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a asp-controller="Slideshow" asp-action="Edit" asp-route-id="@Model.SlideshowId" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

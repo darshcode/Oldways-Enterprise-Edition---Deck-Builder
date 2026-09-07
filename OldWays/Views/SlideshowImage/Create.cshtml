@@ -1,0 +1,44 @@
+﻿@model OldWays.Models.SlideshowImage
+
+@{
+    ViewData["Title"] = "Add Image";
+}
+
+<div class="container mt-4">
+    <h2>Add Image to Slideshow</h2>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="SlideshowId" />
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AltText" class="form-label"></label>
+            <input asp-for="AltText" class="form-control" />
+            <span asp-validation-for="AltText" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DisplayOrder" class="form-label"></label>
+            <input asp-for="DisplayOrder" class="form-control" type="number" />
+            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Image File</label>
+            <input type="file" name="upload" class="form-control" required />
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label"></label>
+        </div>
+
+        <button type="submit" class="btn btn-success">Upload Image</button>
+        <a asp-controller="Slideshow" asp-action="Edit" asp-route-id="@Model.SlideshowId" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

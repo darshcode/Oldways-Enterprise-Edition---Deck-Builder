@@ -4,9 +4,12 @@
     <h2>Slideshows</h2>
 
     <!-- Create Slideshow Button -->
+    @if (User.IsInRole("Admin"))
+{
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createSlideshowModal">
         Create New Slideshow
     </button>
+}
 
     <!-- Create Slideshow Modal -->
     <div class="modal fade" id="createSlideshowModal" tabindex="-1" aria-labelledby="createSlideshowLabel" aria-hidden="true">
@@ -61,15 +64,18 @@
                 <h4>@slideshow.Name</h4>
 
                 <div>
-                    <a asp-controller="Slideshow" asp-action="Edit" asp-route-id="@slideshow.Id"
-                       class="btn btn-warning btn-sm">Edit</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Slideshow" asp-action="Edit" asp-route-id="@slideshow.Id"
+                        class="btn btn-warning btn-sm">Edit</a>
 
-                    <a asp-controller="Slideshow"
-                       asp-action="Delete"
-                       asp-route-id="@slideshow.Id"
-                       class="btn btn-danger btn-sm">
-                        Delete
-                    </a>
+                        <a asp-controller="Slideshow"
+                        asp-action="Delete"
+                        asp-route-id="@slideshow.Id"
+                        class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+                    }
 
                 </div>
             </div>
