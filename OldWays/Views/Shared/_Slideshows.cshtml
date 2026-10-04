@@ -1,133 +1,208 @@
-﻿@model List<OldWays.Models.Slideshow>
-
+﻿
+@model List<OldWays.Models.Slideshow>
+<link rel="stylesheet" href="~/css/slideshow.css" asp-append-version="true" />
 
 <div class="container">
+
     <h2>Slideshows</h2>
 
     @if (User.IsInRole("Admin"))
     {
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createSlideshowModal">
+        <button class="btn btn-primary mb-3"
+                data-bs-toggle="modal"
+                data-bs-target="#createSlideshowModal">
             Create New Slideshow
         </button>
+
+        <!--  Slideshow Modal -->
+        <div class="modal fade"
+             id="createSlideshowModal"
+             tabindex="-1"
+             aria-labelledby="createSlideshowModalLabel"
+             aria-hidden="true">
+
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h5 class="modal-title" id="createSlideshowModalLabel">
+                            Create New Slideshow
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
+
+                    </div>
+
+                    <form asp-controller="Slideshow"
+                          asp-action="Create"
+                          method="post">
+
+                        <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label for="Name" class="form-label">
+                                    Slideshow Name
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="Name"
+                                       name="Name"
+                                       required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="Description" class="form-label">
+                                    Description
+                                </label>
+
+                                <textarea class="form-control"
+                                          id="Description"
+                                          name="Description"
+                                          rows="3"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Create Slideshow
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
     }
 
-    <!-- Create Slideshow Modal -->
-    <!-- ... your modal code stays the same ... -->
+
     @foreach (var slideshow in Model)
     {
         <div class="card mb-4">
+
             <div class="card-header d-flex justify-content-between">
+
                 <h4>@slideshow.Name</h4>
 
                 <div>
+
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-controller="Slideshow" asp-action="Edit" asp-route-id="@slideshow.Id"
-                           class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-controller="Slideshow"
+                           asp-action="Edit"
+                           asp-route-id="@slideshow.Id"
+                           class="btn btn-warning btn-sm">
+                            Edit
+                        </a>
 
-                        <a asp-controller="Slideshow" asp-action="Delete" asp-route-id="@slideshow.Id"
-                           class="btn btn-danger btn-sm">Delete</a>
+                        <a asp-controller="Slideshow"
+                           asp-action="Delete"
+                           asp-route-id="@slideshow.Id"
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
                     }
+
                 </div>
+
             </div>
 
+
             <div class="card-body">
+
                 <p>@slideshow.Description</p>
+
 
                 @if (slideshow.Images?.Any() == true)
                 {
-                    <section class="slider-wrapper">
-                        <div class="slider">
+                    <section class="slider" data-slider>
+
+                        <div class="slider-images">
+
                             @{
                                 var index = 0;
                             }
+
                             @foreach (var img in slideshow.Images.OrderBy(i => i.DisplayOrder))
                             {
-                                var slideId = $"slide-{slideshow.Id}-{index}";
-                                <img id="@slideId" src="@img.ImageUrl" alt="@img.Title" />
+                                <img src="@img.ImageUrl"
+                                     alt="@img.Title"
+                                     class="slide @(index == 0 ? "active" : "")" />
+
                                 index++;
                             }
+
+
+                            <!-- Previous button -->
+
+                            <button type="button"
+                                    class="slider-button slider-prev"
+                                    data-prev
+                                    aria-label="Previous image">
+                                &#10094;
+                            </button>
+
+
+                            <!-- Next button -->
+
+                            <button type="button"
+                                    class="slider-button slider-next"
+                                    data-next
+                                    aria-label="Next image">
+                                &#10095;
+                            </button>
+
+
+                            <!-- Navigation dots -->
+
+                            <div class="slider-nav">
+
+                                @{
+                                    var dotIndex = 0;
+                                }
+
+                                @foreach (var img in slideshow.Images.OrderBy(i => i.DisplayOrder))
+                                {
+                                    <button type="button"
+                                            class="slider-dot @(dotIndex == 0 ? "active" : "")"
+                                            data-slide="@dotIndex"
+                                            aria-label="Go to image @(dotIndex + 1)">
+                                    </button>
+
+                                    dotIndex++;
+                                }
+
+                            </div>
+
                         </div>
 
-                        <div class="slider-nav">
-                            @{
-                                var indexNav = 0;
-                            }
-                            @foreach (var img in slideshow.Images.OrderBy(i => i.DisplayOrder))
-                            {
-                                var slideId = $"slide-{slideshow.Id}-{indexNav}";
-                                <a href="#@slideId"></a>
-                                indexNav++;
-                            }
-                        </div>
                     </section>
                 }
+
             </div>
+
         </div>
     }
+
 </div>
 
-<style>
-    .container {
-        padding: 2rem;
-    }
-
-    .slider-wrapper {
-        position: relative;
-        max-width: 48rem;
-        margin: auto;
-    }
-
-    .slider {
-        display: flex;
-        aspect-ratio: 16/9;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        box-shadow: 0 1.5rem 3rem -0.75rem hsla(0, 0%, 0%, 0.25);
-        border-radius: 1rem;
-        scrollbar-width: none;
-    }
-
-        .slider::-webkit-scrollbar {
-            display: none; /* Chrome, Edge, Safari */
-        }
-
-        .slider img {
-            flex: 1 0 100%;
-            scroll-snap-align: start;
-            object-fit: cover;
-        }
-
-    .slider-nav {
-        display: flex;
-        column-gap: 1rem;
-        position: absolute;
-        bottom: 1.25rem;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
-
-        /*dimmed background */
-        background: rgba(0, 0, 0, 0.35);
-        padding: 0.5rem 1rem;
-        border-radius: 1rem;
-        backdrop-filter: blur(4px);
-    }
-
-    
-
-        .slider-nav a {
-            width: 0.5rem;
-            height: 0.5rem;
-            background-color: #fff;
-            border-radius: 50%;
-            opacity: 0.75;
-            transition: opacity 250ms ease;
-            display: block;
-        }
-
-            .slider-nav a:hover {
-                opacity: 1;
-            }
-</style>
+<script src="~/js/slideshow.js"></script>
